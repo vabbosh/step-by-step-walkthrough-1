@@ -1,0 +1,285 @@
+---
+swagger: '2.0'
+
+################################################################################
+#                       API Information                                        #
+################################################################################
+info:
+  version: "1.0"
+  title:  Account Summary View 
+  description: API for retrieving summary view of the Account. 
+  
+  x-brandSiloSupported: WBC                     # e.g. Brand supported by API - WBC, SGB, WBG
+  x-domain: Enterprise                          # e.g. Digital, Payments, Enterprise         
+  x-type:  partner                              # e.g. internal, partner or public, private  
+  x-businessOwner:                              # Business Owner of the API 
+    name: N/A
+    url:   
+    email: 
+    phone:  
+  x-technicalOwner:                             # Technical Owner of the API 
+    name: Group Intergration - Real Time Integration
+    url:  https://sites.thewestpacgroup.com.au/sites/TS352/SitePages/Home.aspx  
+    email: esbss@westpac.com.au
+    phone: +61 0467 245 533
+  x-supportTeam:                                # Support details (Aligns to Remedy Structure)
+    name: Real Time Integration Support
+    url:   
+    email: esbss@westpac.com.au
+    phone: +61 0467 245 533 
+  x-SLA:                                        #Availability, Support hourse, TPS etc.
+    maxTPS: 10
+    availability: 24X7                          #e.g. 24X7
+    supportHours: Mon-Fri, 8:00 AM - 10:00 PM   #e.g. 24X7
+    
+################################################################################
+#                  Host, Base Path, Schemes and Content Types                  #
+################################################################################
+host: localhost:8080
+basePath: /accounts/savingsdeposits/v1
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+
+################################################################################
+#                                  Security                                    #
+################################################################################
+securityDefinitions:                              
+  # Authentication based on JWT token in header field
+  JWT Bearer:
+    type: apiKey
+    description: The authentication scheme uses the JWT token in the header 'access_token'. 
+    name: access_token
+    in: header
+ 
+security:
+  - JWT Bearer: []
+
+
+################################################################################
+#                                   Parameters                                 #
+################################################################################
+parameters:
+  X-messageId:
+    name: X-messageId
+    in: header
+    description: Globally unique message identifier  - GUID
+    type: string
+    required: true
+  X-appCorrelationId:
+    name: X-appCorrelationId
+    in: header
+    description: Consumer generated message identifier
+    type: string
+    required: false
+  X-brandSilo:
+    name: X-brandSilo
+    in: header
+    description: Brand e.g WBC, SGB
+    type: string    
+    required: true
+    enum:
+      - WPAC
+      - SGB
+      - BTPL
+      - EPL
+  X-organisationId:
+    name: X-organisationId  
+    in: header
+    description: Brand e.g WBC. 
+    type: string    
+    required: false
+    enum:
+      - WBC
+      - SGB
+      - BSA
+      - BOM
+      - BTPL
+      - UBS
+      - VIRG                                      # To be extended when required
+  X-channelType:
+    name: X-channelType
+    in: header
+    description: Channel Type 
+    type: string    
+    required: true
+    enum:
+      - Branch
+      - Online
+      - Contact Centre
+      - ATM
+      - Mobile
+      - IVR Telephony
+      - Relationship Managed
+      - External Broker
+      - External EFA
+      - External
+      - Unknown
+      - Internal
+  X-originatingSystemId:
+    name: X-originatingSystemId  
+    in: header
+    description: System Id of Application e.g. KO-001
+    type: string    
+    required: true
+  X-originatingSubSystemId:
+    name: X-originatingSubSystemId  
+    in: header
+    description: Sub Sytem Id to Idenfity a specific application or bussiness case under the System
+    type: string    
+    required: false
+
+################################################################################
+#                      Paths                                                   #
+################################################################################
+paths:
+  /accounts/summaryView:
+    parameters:
+      - $ref: '#/parameters/X-messageId'
+      - $ref: '#/parameters/X-appCorrelationId'
+      - $ref: '#/parameters/X-brandSilo'
+      - $ref: '#/parameters/X-organisationId'
+      - $ref: '#/parameters/X-channelType'
+      - $ref: '#/parameters/X-originatingSystemId'
+      - $ref: '#/parameters/X-originatingSubSystemId'
+      # Account reference where Account identifier is stored.
+      - name: accountRef
+        in: query
+        description: The pointer to header field where account identifier is available.
+        type: string
+        default: X-accountIdentifier
+        required: true
+      # Account Identifier.  Decision is not to include in path, but will be sent in header.
+      - name: X-accountIdentifier
+        in: header
+        description: An unique identifier for the account. Format <ProductCode>.<BSB Code>.<AccountNumber>
+        type: string
+        required: true
+
+    get:
+      tags:
+        - retrieveAccountSummaryView
+      description: retrieves summary view of the account.
+      operationId: retrieveAccountSummaryView
+
+      responses:
+        #Success
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string                        #status should be 'Success'
+                enum:
+                  - success
+              data:
+                  $ref: '#/definitions/AccountSummaryView'
+        204:
+          description: No Content
+        # Client Errors
+        400:
+          description: Bad Request
+          schema:
+            type: object          
+            properties:
+              status:                               #status should be 'fail'
+                type: string
+                enum:
+                  - fail
+              data:
+                $ref: '#/definitions/ErrorModel'
+        401:
+          description: Unauthorised
+          schema:
+            type: object          
+            properties:
+              status:                               #status should be 'fail'
+                type: string
+                enum:
+                  - fail
+              data:
+                $ref: '#/definitions/ErrorModel'
+        403:
+          description: Forbidden
+          schema:
+            type: object          
+            properties:
+              status:                               #status should be 'fail'
+                type: string
+                enum:
+                  - fail
+              data:
+                $ref: '#/definitions/ErrorModel'
+        404:
+          description: Not found
+          schema:
+            type: object          
+            properties:
+              status:                               #status should be 'fail'
+                type: string
+                enum:
+                  - fail
+              data:
+                $ref: '#/definitions/ErrorModel'                
+        # Server Errors
+        500:
+          description: Internal Server Error
+          schema:
+            type: object          
+            properties:
+              status:                              #status should be 'error'
+                type: string
+                enum:
+                  - error
+              data:
+                $ref: '#/definitions/ErrorModel'
+
+################################################################################
+#                           Definitions                                        #
+################################################################################
+definitions:
+  #The Account summary information - to be extended as need arises
+  AccountSummaryView:
+    type: object
+    description: Represents  summary level information about the Account.
+    properties:
+      status:
+        type: string
+        description: Status of the account
+        enum:
+          - Normal
+          - Restricted
+      monetaryLimit:
+        type: number
+        format: double
+        description: Overdrawn limits for the account
+
+  #The common error object        
+  ErrorModel:
+    description: Represents the error Model, returned in case of error conditions
+    type: object
+    properties:
+      errorList:
+        type: array
+        items:
+          $ref: '#/definitions/Error'
+
+  # Individual Error Object
+  Error:
+    description:  Represent an invidual error.
+    type: object
+    properties:
+      code:
+        description:  Error Code.
+        type: integer
+        format: int32
+      message:
+        description:  Error Message
+        type: string
+      fields:
+        description: Comma seperated list of fields, which caused the error condition.
+        type: string

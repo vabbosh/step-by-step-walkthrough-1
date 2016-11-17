@@ -1,0 +1,10 @@
+{
+"basePackage":"au.com.westpac.accounts.savingsdeposits",
+"configPackage":"au.com.westpac.accounts.savingsdeposits",
+"modelPackage":"au.com.westpac.accounts.savingsdeposits",
+"apiPackage":"au.com.westpac.accounts.savingsdeposits.api",
+"invokerPackage":"au.com.westpac.accounts.savingsdeposits.gen",
+"groupId":"au.com.westpac.accounts.savingsdeposits",
+"artifactId":"accounts-savingsdeposits",
+"artifactVersion":"1.0-SNAPSHOT"
+}
