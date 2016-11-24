@@ -5,5 +5,5 @@ RUN rm -rf "/usr/local/tomcat/webapps/ROOT" && chown -R tomcat:tomcat /usr/local
 USER tomcat
 ENV SERVICE_NAME accounts-savingsdeposits-v1
 
-ENTRYPOINT ["goreman"]
-CMD ["-f", "/root/Procfile", "start"]
+# launch the catalina-wrapper script. This CMD should be removed later. I am using it for testing purposes now 
+CMD ["/usr/local/tomcat/bin/catalina-wrapper.sh", "run"]
