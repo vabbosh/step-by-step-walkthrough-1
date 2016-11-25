@@ -5,7 +5,7 @@ The API service is built and deployed through 3 different stages:
   and run `maven` to build the service _WAR_ file. It then copies the _Dockerfile_ to same build folder and rename the _WAR_ file to _ROOT.war_.
   This stage is triggered either manually or when a code change is commited to the Git repository.
 ### **2. Build image**
-  This stage is triggered after the _Build WAR_ stage or manually. It will use the ![_Dockerfile_] to extend
+  This stage is triggered after the _Build WAR_ stage or manually. It will use the ![_Dockerfile_](https://github.com/containers-a8/step-by-step-walkthrough/blob/Add-Consul-Reg/docker-build/Dockerfile) to extend
   the ![_tomcat-base_ image](https://github.com/containers-a8/docker-base-image-one-step/blob/master/wdp/Dockerfile), which 
   was already built using another Pipeline.
   It deploys the _ROOT.war_ file and uses a ![_wrapper script_](https://github.com/containers-a8/docker-base-image-one-step/blob/master/wdp/catalina-wrapper.sh) as an entry point.
@@ -18,4 +18,4 @@ The API service is built and deployed through 3 different stages:
   ```json
   {"code":4,"type":"ok","message":"magic!"}
   ```
-  
+
