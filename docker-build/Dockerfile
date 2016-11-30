@@ -5,6 +5,9 @@ RUN rm -rf "/usr/local/tomcat/webapps/ROOT" && chown -R tomcat:tomcat /usr/local
 #Give tomcat user ownership of Consul data directory
 RUN chown -R tomcat:tomcat /data/consul && chmod -R u+rw /data/consul
 
+#Give tomcat user ownership of /etc/consul.d  directory
+RUN chown -R tomcat:tomcat /etc/consul.d && chmod -R u+rw /etc/consul.d
+
 USER tomcat
 ENV SERVICE_NAME accounts-savingsdeposits-v1
 
