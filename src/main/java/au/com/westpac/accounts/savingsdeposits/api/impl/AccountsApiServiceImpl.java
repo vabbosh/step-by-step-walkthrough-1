@@ -22,6 +22,6 @@ public class AccountsApiServiceImpl extends AccountsApiService {
     @Override
     public Response retrieveAccountSummaryView(String xMessageId, String xBrandSilo, String xChannelType, String xOriginatingSystemId, String accountRef, String xAccountIdentifier, String xAppCorrelationId, String xOrganisationId, String xOriginatingSubSystemId, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "Bluemix magic!")).build();
     }
 }

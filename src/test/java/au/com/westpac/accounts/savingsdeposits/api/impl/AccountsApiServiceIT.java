@@ -22,6 +22,6 @@ public class AccountsApiServiceIT extends JerseyTest {
     public void shouldReturnMagic() {
         ApiResponseMessage message = target("/accounts/summaryView").request().get(ApiResponseMessage.class);
         Assert.assertThat(message.getType(), is("ok"));
-        Assert.assertThat(message.getMessage(), is("magic!"));
+        Assert.assertThat(message.getMessage(), is("Bluemix magic!"));
     }
 }

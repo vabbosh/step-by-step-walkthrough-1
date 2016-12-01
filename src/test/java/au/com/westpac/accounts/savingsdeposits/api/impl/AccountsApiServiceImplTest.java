@@ -18,6 +18,6 @@ public class AccountsApiServiceImplTest {
         Response response = this.serviceImpl.retrieveAccountSummaryView("xMessageId", "xBrandSilo", "xChannelType", "xOriginatingSystemId", "accountRef", "xAccountIdentifier", "xAppCorrelationId", "xOrganisationId", "xOriginatingSubSystemId", null);
         ApiResponseMessage message = (ApiResponseMessage) response.getEntity();
         Assert.assertThat(message.getCode(), is(ApiResponseMessage.OK));
-        Assert.assertThat(message.getMessage(), is("magic!"));
+        Assert.assertThat(message.getMessage(), is("Bluemix magic!"));
     }
 }
